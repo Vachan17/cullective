@@ -1,0 +1,11 @@
+{
+  "name": "cullective-ai-root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "npm run dev --prefix client",
+    "build": "npm run build --prefix client",
+    "server": "docker-compose up --build",
+    "reanalyze": "docker exec cullective_server node reanalyze.js"
+  }
+}

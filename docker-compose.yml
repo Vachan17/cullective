@@ -1,0 +1,45 @@
+
+
+services:
+  mongo:
+    image: mongo:7
+    container_name: cullective_mongo
+    restart: always
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: cullective
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: cullective_server
+    restart: always
+    ports:
+      - '5000:5000'
+    depends_on:
+      - mongo
+    environment:
+      - NODE_ENV=production
+      - MONGODB_URI=mongodb://mongo:27017/cullective
+    env_file:
+      - ./server/.env
+    volumes:
+      - /c/Users:/host/c/Users
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: cullective_client
+    restart: always
+    ports:
+      - '80:80'
+    depends_on:
+      - server
+
+volumes:
+  mongo_data:
